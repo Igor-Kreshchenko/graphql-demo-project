@@ -1,0 +1,26 @@
+{
+  "name": "graphql-demo-project",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Igor-Kreshchenko/graphql-demo-project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/Igor-Kreshchenko/graphql-demo-project/issues"
+  },
+  "homepage": "https://github.com/Igor-Kreshchenko/graphql-demo-project#readme",
+  "dependencies": {
+    "@apollo/server": "^5.5.1",
+    "graphql": "^16.14.2",
+    "prettier": "^3.9.9"
+  }
+}
