@@ -5,6 +5,7 @@ export const movies = [
     filmed: true,
     year: 2010,
     rating: 8.8,
+    authorId: '1',
   },
   {
     id: '2',
@@ -12,6 +13,7 @@ export const movies = [
     filmed: true,
     year: 1999,
     rating: 8.7,
+    authorId: '2',
   },
   {
     id: '3',
@@ -19,6 +21,7 @@ export const movies = [
     filmed: true,
     year: 2014,
     rating: 8.6,
+    authorId: '3',
   },
 ];
 
