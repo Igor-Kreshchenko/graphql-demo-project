@@ -20,7 +20,9 @@
   "homepage": "https://github.com/Igor-Kreshchenko/graphql-demo-project#readme",
   "dependencies": {
     "@apollo/server": "^5.5.1",
+    "dotenv": "^18.0.6",
     "graphql": "^16.14.2",
+    "mongoose": "^9.11.1",
     "prettier": "^3.9.9"
   }
 }

@@ -1,52 +1,43 @@
-import { movies, authors } from './data.js';
+import { MovieModel } from './models/Movie.js';
+import { AuthorModel } from './models/Author.js';
 
 export const resolvers = {
-    Query: {
-        movies: () => movies,
-        authors: () => authors,
-        movie: (_, args) => movies.find((movie) => movie.id === args.id),
-        author: (_, args) => authors.find((author) => author.id === args.id),
-        moviesByYear: (_, args) => movies.filter((movie) => movie.year === args.year),
-        topRatedMovies: (_, args) => movies.filter((movie) => movie.rating >= args.minRating),
+  Query: {
+    movies: async () => await MovieModel.find(),
+    authors: async () => await AuthorModel.find(),
+    movie: async (_, { id }) => await MovieModel.findById(id),
+    author: async (_, { id }) => await AuthorModel.findById(id),
+    moviesByYear: async (_, { year }) => await MovieModel.find({ year: year }),
+    topRatedMovies: async (_, { rating }) =>
+      await MovieModel.find({ rating: { $gte: rating } }).sort({
+        rating: -1,
+      }),
+  },
+  Movie: {
+    author: async parent => await AuthorModel.findById(parent.authorId),
+  },
+  Author: {
+    movies: async parent => await MovieModel.find({ authorId: parent._id }),
+  },
+  Mutation: {
+    addMovie: async (_, { title, filmed, year, rating, authorId }) => {
+      const newMovie = new MovieModel({
+        title,
+        filmed,
+        year,
+        rating,
+        authorId,
+      });
+      await newMovie.save();
+      return newMovie;
     },
-    Movie: {
-        author: (parent) => authors.find((author) => author.id === parent.authorId),
+    deleteMovie: async (_, { id }) => {
+      const result = await MovieModel.findByIdAndDelete(id);
+      return result ? true : false;
     },
-    Author: {
-        movies: (parent) => movies.filter((movie) => movie.authorId === parent.id),
+    updateMovie: async (_, { id, ...args }) => {
+      const movie = await MovieModel.findByIdAndUpdate(id, args, { new: true });
+      return movie;
     },
-    Mutation: {
-        addMovie: (_, args) => {
-            const newMovie = {
-                id: String(movies.length + 1),
-                title: args.title,
-                filmed: args.filmed,
-                year: args.year,
-                rating: args.rating,
-                authorId: args.authorId,
-            };
-            movies.push(newMovie);
-            return newMovie;
-        },
-        deleteMovie: (_, args) => {
-            const index = movies.findIndex((movie) => movie.id === args.id);
-            if (index !== -1) {
-                movies.splice(index, 1);
-                return true;
-            }
-            return false;
-        },
-        updateMovie: (_, args) => {
-            const movie = movies.find((movie) => movie.id === args.id);
-            if (movie) {
-                if (args.title !== undefined) movie.title = args.title;
-                if (args.filmed !== undefined) movie.filmed = args.filmed;
-                if (args.year !== undefined) movie.year = args.year;
-                if (args.rating !== undefined) movie.rating = args.rating;
-                if (args.authorId !== undefined) movie.authorId = args.authorId;
-                return movie;
-            }
-            return null;
-        },
-    },
-}
+  },
+};
